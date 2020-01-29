@@ -19,7 +19,7 @@ public class SwaggerConfigration {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.wencheng.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.zhurong.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -27,7 +27,7 @@ public class SwaggerConfigration {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("es-demo-7.5接口")
-                .description("123456")
+                .description("火神项目平台")
                 .termsOfServiceUrl("http://www.baidu.com")
                 .version("1.0.0")
                 .build();
