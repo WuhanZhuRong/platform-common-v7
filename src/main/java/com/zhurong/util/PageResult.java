@@ -1,4 +1,4 @@
-package com.wencheng.util;
+package com.zhurong.util;
 
 import lombok.Data;
 
@@ -6,11 +6,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author : 唐逸
- * @version : created date: 2020/1/7 11:41
- */
 @Data
 public class PageResult<T> implements Serializable {
     private static final long serialVersionUID = -7327158695003901796L;

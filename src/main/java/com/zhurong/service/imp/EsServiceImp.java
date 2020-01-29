@@ -1,10 +1,11 @@
-package com.wencheng.service.imp;
+package com.zhurong.service.imp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wencheng.bean.User;
-import com.wencheng.service.EsService;
-import com.wencheng.util.DateTimeUtil;
-import com.wencheng.util.PageResult;
+import com.zhurong.bean.User;
+import com.zhurong.service.EsService;
+import com.zhurong.util.DateTimeUtil;
+import com.zhurong.util.PageResult;
+
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.index.IndexRequest;
@@ -35,13 +36,6 @@ import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @Title : EsServiceImp
- * @Package : com.wencheng.service.imp
- * @Description :
- * @author : 唐逸
- * @date : 2020/1/7 16:38
- */
 @Service
 public class EsServiceImp implements EsService {
 
@@ -60,27 +54,12 @@ public class EsServiceImp implements EsService {
         this.objectMapper = objectMapper;
     }
 
-    /**
-     * @author : 唐逸
-     * @description : 分页查询
-     * @date : 2020/1/7
-     * @param page 当前页
-     * @param size 页面大小
-     * @return com.wencheng.util.PageResult<com.wencheng.bean.User>
-     */
     @Override
     public PageResult<User> getAll(Integer page, Integer size) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         return getPageResult(page, size, searchSourceBuilder);
     }
 
-    /**
-     * @author : 唐逸
-     * @description : 添加数据
-     * @date : 2020/1/7
-     * @param user document
-     * @return void
-     */
     @SuppressWarnings("unchecked")
     @Override
     public void save(User user) {
@@ -93,13 +72,6 @@ public class EsServiceImp implements EsService {
         }
     }
 
-    /**
-     * @author : 唐逸
-     * @description : 删除数据
-     * @date : 2020/1/7
-     * @param id 主键
-     * @return void
-     */
     @Override
     public void delById(Integer id) {
         DeleteRequest deleteRequest = new DeleteRequest(USER1, id.toString());
@@ -110,15 +82,6 @@ public class EsServiceImp implements EsService {
         }
     }
 
-    /**
-     * @author : 唐逸
-     * @description : 按姓名模糊查询
-     * @date : 2020/1/7
-     * @param page 当前页
-     * @param size 页面大小
-     * @param criteria 关键字
-     * @return com.wencheng.util.PageResult<com.wencheng.bean.User>
-     */
     @Override
     public PageResult<User> findByNameLike(Integer page, Integer size, String criteria) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
@@ -128,15 +91,6 @@ public class EsServiceImp implements EsService {
 
 
 
-    /**
-     * @author : 唐逸
-     * @description : 全文检索
-     * @date : 2020/1/8
-     * @param page 当前页
-     * @param size 页面大小
-     * @param criteria 关键字
-     * @return com.wencheng.util.PageResult<com.wencheng.bean.User>
-     */
     @Override
     public PageResult<User> search(Integer page, Integer size, String criteria) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
@@ -144,18 +98,6 @@ public class EsServiceImp implements EsService {
         return getPageResult(page, size, searchSourceBuilder);
     }
 
-    /**
-     * @author : 唐逸
-     * @description : 多条件搜索
-     * @date : 2020/1/8
-     * @param page 当前页
-     * @param size 页面大小
-     * @param name 名称
-     * @param age 年龄
-     * @param start 开始时间
-     * @param end 结束时间
-     * @return com.wencheng.util.PageResult<com.wencheng.bean.User>
-     */
     @Override
     public PageResult<User> search(Integer page, Integer size, String name, Integer age, String start, String end) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
@@ -174,13 +116,6 @@ public class EsServiceImp implements EsService {
         return getPageResult(page, size, searchSourceBuilder);
     }
 
-    /**
-     * @author : 唐逸
-     * @description : 添加索引
-     * @date : 2020/1/10
-     * @param index 索引名
-     * @return void
-     */
     @Override
     public void createIndex(String index) {
         CreateIndexRequest createIndexRequest= new CreateIndexRequest(index);
@@ -253,13 +188,6 @@ public class EsServiceImp implements EsService {
         }
     }
 
-    /**
-     * @author : 唐逸
-     * @description : 删除索引
-     * @date : 2020/1/7
-     * @param index 索引名
-     * @return java.lang.String
-     */
     @Override
     public String delIndex(String index) {
         //判断索引是否存在
@@ -286,13 +214,6 @@ public class EsServiceImp implements EsService {
         return "删除失败";
     }
 
-    /**
-     * @author : 唐逸
-     * @description : 判断索引是否存在
-     * @date : 2020/1/7
-     * @param index 索引名
-     * @return boolean
-     */
     private boolean existsIndex(String index){
         GetIndexRequest request = new GetIndexRequest(index);
         try {
@@ -308,15 +229,6 @@ public class EsServiceImp implements EsService {
         return false;
     }
 
-    /**
-     * @author : 唐逸
-     * @description :查询
-     * @date : 2020/1/8
-     * @param page 当前页
-     * @param size 页面大小
-     * @param searchSourceBuilder 条件
-     * @return com.wencheng.util.PageResult<com.wencheng.bean.User>
-     */
     private PageResult<User> getPageResult(Integer page, Integer size, SearchSourceBuilder searchSourceBuilder) {
         SearchRequest searchRequest = new SearchRequest();
         searchRequest.indices(USER);
@@ -368,12 +280,6 @@ public class EsServiceImp implements EsService {
         return null;
     }
 
-    /**
-     * @author : 唐逸
-     * @description : 高亮
-     * @date : 2020/1/10
-     * @return org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder
-     */
     private HighlightBuilder getHighlightBuilder (){
         HighlightBuilder highlightBuilder = new HighlightBuilder();
         highlightBuilder.field("name");
@@ -382,13 +288,6 @@ public class EsServiceImp implements EsService {
         highlightBuilder.postTags("</span>");
         return highlightBuilder;
     }
-    /**
-     * @author : 唐逸
-     * @description : 日期处理
-     * @date : 2020/1/9
-     * @param date 日期数据
-     * @return java.lang.String
-     */
     private String dateDispose(String date){
         if(StringUtils.isEmpty(date) || !DateTimeUtil.isDateStr(date, YMD)){
             return null;

@@ -1,15 +1,8 @@
-package com.wencheng.service;
+package com.zhurong.service;
 
-import com.wencheng.bean.User;
-import com.wencheng.util.PageResult;
+import com.zhurong.bean.User;
+import com.zhurong.util.PageResult;
 
-/**
- * @Title : EsService
- * @Package : com.wencheng.service
- * @Description :
- * @author : 唐逸
- * @date : 2020/1/7 16:37
- */
 public interface EsService {
 
     void delById(Integer id);

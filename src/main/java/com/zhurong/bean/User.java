@@ -1,4 +1,4 @@
-package com.wencheng.bean;
+package com.zhurong.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -10,13 +10,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @Title : User
- * @Package : com.wencheng.bean
- * @Description :
- * @author : 唐逸
- * @date : 2020/1/7 16:36
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

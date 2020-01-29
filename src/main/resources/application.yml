@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    context-path: /es
+    context-path: /zhurong
 
 elasticsearch:
   hosts: 47.89.14.138

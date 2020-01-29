@@ -1,4 +1,4 @@
-package com.wencheng.config;
+package com.zhurong.config;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
@@ -10,13 +10,6 @@ import org.springframework.context.annotation.Primary;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @Title : Config
- * @Package : com.wencheng.config
- * @Description :
- * @author : 唐逸
- * @date : 2020/1/7 16:36
- */
 @Configuration
 public class Config {
 

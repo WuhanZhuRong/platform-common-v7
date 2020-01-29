@@ -1,8 +1,5 @@
-package com.wencheng.controller;
+package com.zhurong.controller;
 
-import com.wencheng.bean.User;
-import com.wencheng.service.EsService;
-import com.wencheng.util.PageResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -16,16 +13,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.zhurong.bean.User;
+import com.zhurong.service.EsService;
+import com.zhurong.util.PageResult;
+
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
-/**
- * @Title : UserController
- * @Package : com.wencheng.controller
- * @Description :
- * @author : 唐逸
- * @date : 2020/1/7 16:37
- */
 @Api("User接口")
 @RestController
 public class UserController {
@@ -39,13 +34,6 @@ public class UserController {
         this.esService = esService;
     }
 
-    /**
-     * @author : 唐逸
-     * @description : 添加索引
-     * @date : 2020/1/7
-     * @param index
-     * @return java.lang.String
-     */
     @RequestMapping(value = "/createIndex", method = RequestMethod.PUT)
     @ApiOperation(value = "添加索引", notes = "输入索引名")
     @ApiImplicitParam(paramType = "query", name = "index",value = "索引名", dataType = "String", required = true)
@@ -59,13 +47,6 @@ public class UserController {
         }
     }
 
-    /**
-     * @author : 唐逸
-     * @description : 删除索引
-     * @date : 2020/1/7
-     * @param index
-     * @return java.lang.String
-     */
     @RequestMapping(value = "/delIndex", method = RequestMethod.DELETE)
     @ApiOperation(value = "删除索引", notes = "输入索引名")
     @ApiImplicitParam(paramType = "query", name = "index",value = "索引名", dataType = "String", required = true)
@@ -77,14 +58,6 @@ public class UserController {
             return "删除失败";
         }
     }
-    /**
-     * @author : 唐逸
-     * @description : 分页获取全部
-     * @date :2020/1/7
-     * @param page 当前页
-     * @param size 每页最大数据量
-     * @return com.wencheng.util.PageResult<com.wencheng.bean.User>
-     */
     @RequestMapping(value = "/getAll/{page}/{size}", method = RequestMethod.GET)
     @ApiOperation(value = "获取全部数据", notes = "根据分页获取")
     @ApiImplicitParams({
@@ -96,14 +69,6 @@ public class UserController {
         return esService.getAll(page, size);
     }
 
-    /**
-     * @author : 唐逸
-     * @description : 添加数据
-     * @date : 2020/1/7
-     * @param sum 添加的数据量
-     * @param name 名称
-     * @return java.lang.String
-     */
     @RequestMapping(value = "/save/{id}/{sum}", method = RequestMethod.PUT)
     @ApiOperation(value = "添加数据", notes = "根据名称和指定的数量添加")
     @ApiImplicitParams({
@@ -128,13 +93,6 @@ public class UserController {
         return "<<<<<添加成功>>>>>";
     }
 
-    /**
-     * @author : 唐逸
-     * @description : 按id删除
-     * @date : 2020/1/7
-     * @param id id
-     * @return java.lang.String
-     */
     @RequestMapping(value = "/del/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "删除数据", notes = "根据id删除")
     @ApiImplicitParam(paramType = "path", name = "id", value = "唯一标识", required = true)
@@ -149,15 +107,6 @@ public class UserController {
         return "删除成功";
     }
 
-    /**
-     * @author : 唐逸
-     * @description :
-     * @date : 2020/1/7
-     * @param page
-     * @param size
-     * @param criteria
-     * @return com.wencheng.util.PageResult<com.wencheng.bean.User>
-     */
     @RequestMapping(value = "/findByNameLike/{page}/{size}", method = RequestMethod.GET)
     @ApiOperation(value = "根据姓名模糊查询", notes = "请输入姓名")
     @ApiImplicitParams({
@@ -169,15 +118,6 @@ public class UserController {
         return esService.findByNameLike(page, size, criteria);
     }
 
-    /**
-     * @author : 唐逸
-     * @description : ElasticsearchTemplate全文搜索
-     * @date : 22020/1/7
-     * @param page
-     * @param size
-     * @param criteria
-     * @return com.wencheng.util.PageResult<com.wencheng.bean.User>
-     */
     @RequestMapping(value = "/search/{page}/{size}", method = RequestMethod.GET)
     @ApiOperation(value = "全文搜索", notes = "输入条件")
     @ApiImplicitParams({
@@ -193,18 +133,6 @@ public class UserController {
         return esService.search(page, size, criteria);
     }
 
-    /**
-     * @author : 唐逸
-     * @description :
-     * @date : 2020/1/7
-     * @param page
-     * @param size
-     * @param name
-     * @param age
-     * @param start
-     * @param end
-     * @return com.wencheng.util.PageResult<com.wencheng.bean.User>
-     */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     @ApiOperation(value = "多条件搜素", notes = "输入多个条件")
     @ApiImplicitParams({
