@@ -20,7 +20,9 @@ public interface EsService {
 
     PageResult<Hospital> findHospByCity(Integer page, Integer size, String city);
 
-    PageResult<Hospital> findHospital(Integer page, Integer size, String city, ArrayList<String> supplies);
+    PageResult<Hospital> findHospitalList(Integer page, Integer size, String city, ArrayList<String> supplies);
+
+    PageResult<Hospital> findHospital(String id);
 
     PageResult<User> search(Integer page, Integer size, String criteria);
 
