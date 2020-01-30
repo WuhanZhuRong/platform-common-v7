@@ -85,7 +85,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.cntaiping.tpa.EmsApplication</mainClass>
+                    <mainClass>com.zhurong.SinospnWebApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
