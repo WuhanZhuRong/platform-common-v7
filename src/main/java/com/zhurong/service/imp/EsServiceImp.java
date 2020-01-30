@@ -47,7 +47,7 @@ public class EsServiceImp implements EsService {
     private static final String USER = "index";
     private static final String USER1 = "user1";
     private static final String YMD = "yyyy-MM-dd";
-
+    @Autowired
     private RestHighLevelClient restHighLevelClient;
     private ObjectMapper objectMapper;
 
