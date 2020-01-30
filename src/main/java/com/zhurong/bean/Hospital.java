@@ -12,26 +12,32 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class Hospital implements Serializable {
-    /**
-	 * 
+	/**
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 	public String id;
 
-    public String contributor;
+	public String contributor;
 
-    public String province;
+	public String province;
 
-    public String city;
+	public String city;
 
-    public String suburb;
+	public String suburb;
 
-    public String name;
+	public String name;
 
-    public String address;
+	public String address;
 
-    public String phone;
+	public String phone;
+
+	public String supplies;
+
+	public String getSupplies() { return supplies; };
+
+	public void setSupplies() { this.supplies = supplies; };
 
 	public String getId() {
 		return id;
@@ -96,7 +102,7 @@ public class Hospital implements Serializable {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-    
-    
+
+
 
 }

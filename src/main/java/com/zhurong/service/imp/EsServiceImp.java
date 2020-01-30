@@ -18,6 +18,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.text.Text;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -34,6 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +43,7 @@ import java.util.Map;
 public class EsServiceImp implements EsService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EsServiceImp.class);
-//    private static final String USER = "user";
+    //    private static final String USER = "user";
     private static final String USER = "index";
     private static final String USER1 = "user1";
     private static final String YMD = "yyyy-MM-dd";
@@ -60,7 +62,7 @@ public class EsServiceImp implements EsService {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         return getPageResult(page, size, searchSourceBuilder);
     }
-    
+
     @Override
     public PageResult<Hospital> getHospAll(Integer page, Integer size) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
@@ -96,7 +98,26 @@ public class EsServiceImp implements EsService {
         return getPageResult(page, size, searchSourceBuilder);
     }
 
+    @Override
+    public PageResult<Hospital> findHospByCity(Integer page, Integer size, String city) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchQuery("city", city));
+        return getHospPageResult(page, size, searchSourceBuilder);
+    }
 
+    @Override
+    public PageResult<Hospital> findHospital(Integer page, Integer size, String city, ArrayList<String> supplies) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        if (city != null) {
+            boolQueryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("city", city));
+        }
+        for (String supply: supplies) {
+            boolQueryBuilder.should(QueryBuilders.matchQuery("supplies", supply));
+        }
+        searchSourceBuilder.query(boolQueryBuilder);
+        return getHospPageResult(page, size, searchSourceBuilder);
+    }
 
     @Override
     public PageResult<User> search(Integer page, Integer size, String criteria) {
@@ -286,7 +307,7 @@ public class EsServiceImp implements EsService {
         }
         return null;
     }
-    
+
     private PageResult<Hospital> getHospPageResult(Integer page, Integer size, SearchSourceBuilder searchSourceBuilder) {
         SearchRequest searchRequest = new SearchRequest();
         searchRequest.indices(USER);

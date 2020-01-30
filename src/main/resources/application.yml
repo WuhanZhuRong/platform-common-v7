@@ -4,5 +4,5 @@ server:
     context-path: /zhurong
 
 elasticsearch:
-  hosts: 47.89.14.138
+  hosts: czr.vipdesk.cn
 

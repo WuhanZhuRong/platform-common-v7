@@ -1,14 +1,12 @@
 package com.zhurong.controller;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.zhurong.model.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -17,44 +15,52 @@ import com.zhurong.service.EsService;
 import com.zhurong.util.PageResult;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Api("Info接口")
 @RestController
 public class InfoController {
-    
+
     private static final  Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     private EsService esService;
+
+    private final static BiMap<String, Integer> SUPPLY = HashBiMap.create();
+
+    static {
+        SUPPLY.put("医用外科口罩", 1);
+        SUPPLY.put("n95口罩", 2);
+        SUPPLY.put("一次性医用口罩", 3);
+        SUPPLY.put("防护面罩", 4);
+        SUPPLY.put("防冲击眼罩", 5);
+        SUPPLY.put("防护目镜", 6);
+        SUPPLY.put("防护眼镜", 7);
+        SUPPLY.put("一次性医用帽子", 8);
+        SUPPLY.put("测体温设备", 9);
+        SUPPLY.put("空气消毒设备", 10);
+        SUPPLY.put("医用紫外线消毒车", 11);
+    }
 
     @Autowired
     public InfoController(EsService esService){
         this.esService = esService;
     }
-    
-    @RequestMapping(value = "/hospital/{page}/{size}", method = RequestMethod.GET)
-    @ApiOperation(value = "获取全部数据", notes = "根据分页获取")
-    @ApiImplicitParams({
-        @ApiImplicitParam(paramType = "path", name = "page", value = "当前页", dataType = "int", required = true),
-        @ApiImplicitParam(paramType = "path", name = "size", value = "每页最大数据量", dataType = "int", required = true)
-    })
-    public PageResult<Hospital> hospitals(@PathVariable Integer page, @PathVariable Integer size){
-//        Iterable<Hospital> iterable = repository.findAll();
-//        Iterator<Hospital> iterator = iterable.iterator();
-//        List<Hospital> list = IteratorUtils.toList(iterator);
-//        esService.getAll(page, size);
-        return esService.getHospAll(page, size);
+
+    @RequestMapping(value = "/hospital", method = RequestMethod.POST)
+    public PageResult<Hospital> hospitals(Filter filter) {
+        ArrayList<String> suppliesList = new ArrayList<String>();
+        ArrayList<Integer> suppliesIds = filter.getSupplies();
+        for (int i = 0; i < suppliesIds.size(); i++) {
+            suppliesList.add(i, SUPPLY.inverse().get(suppliesIds.get(i)));
+        }
+        return esService.findHospital(filter.getPage(), filter.getSize(), filter.city, suppliesList);
     }
 
-
-    @RequestMapping(value = "/supplies/{page}/{size}", method = RequestMethod.GET)
-    @ApiOperation(value = "获取全部数据", notes = "根据分页获取")
-    @ApiImplicitParams({
-        @ApiImplicitParam(paramType = "path", name = "page", value = "当前页", dataType = "int", required = true),
-        @ApiImplicitParam(paramType = "path", name = "size", value = "每页最大数据量", dataType = "int", required = true)
-    })
+    @RequestMapping(value = "/supplies", method = RequestMethod.GET)
+    @ResponseBody
     public JSONArray supplies(){
         JSONArray jsonarray = new JSONArray();
 
