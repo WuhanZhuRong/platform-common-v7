@@ -48,8 +48,13 @@ public class InfoController {
         return esService.getHospAll(page, size);
     }
 
-    @RequestMapping("/supplies")
-    @ResponseBody
+
+    @RequestMapping(value = "/supplies/{page}/{size}", method = RequestMethod.GET)
+    @ApiOperation(value = "获取全部数据", notes = "根据分页获取")
+    @ApiImplicitParams({
+        @ApiImplicitParam(paramType = "path", name = "page", value = "当前页", dataType = "int", required = true),
+        @ApiImplicitParam(paramType = "path", name = "size", value = "每页最大数据量", dataType = "int", required = true)
+    })
     public JSONArray supplies(){
         JSONArray jsonarray = new JSONArray();
 
