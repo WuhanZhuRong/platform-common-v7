@@ -1,5 +1,6 @@
 package com.zhurong.service;
 
+import com.zhurong.bean.Hospital;
 import com.zhurong.bean.User;
 import com.zhurong.util.PageResult;
 
@@ -8,6 +9,8 @@ public interface EsService {
     void delById(Integer id);
 
     PageResult<User> getAll(Integer page, Integer size);
+    
+    PageResult<Hospital> getHospAll(Integer page, Integer size);
 
     void save(User user);
 

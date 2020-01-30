@@ -1,6 +1,7 @@
 package com.zhurong.service.imp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zhurong.bean.Hospital;
 import com.zhurong.bean.User;
 import com.zhurong.service.EsService;
 import com.zhurong.util.DateTimeUtil;
@@ -58,6 +59,12 @@ public class EsServiceImp implements EsService {
     public PageResult<User> getAll(Integer page, Integer size) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         return getPageResult(page, size, searchSourceBuilder);
+    }
+    
+    @Override
+    public PageResult<Hospital> getHospAll(Integer page, Integer size) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        return getHospPageResult(page, size, searchSourceBuilder);
     }
 
     @SuppressWarnings("unchecked")
@@ -260,6 +267,57 @@ public class EsServiceImp implements EsService {
                     sourceAsMap.put("name", name.toString());
                 }
                 pageResult.getData().add(objectMapper.convertValue(sourceAsMap, User.class));
+            }
+            pageResult.setPageNo(page);
+            pageResult.setPageSize(size);
+            pageResult.setTotalCount(searchResponse.getHits().getTotalHits().value);
+            pageResult.setPageCount((long)Math.ceil(pageResult.getTotalCount()/(size+0.0)));
+            pageResult.setHasNextPage(page < pageResult.getPageCount());
+            pageResult.setHasPreviousPage(page > 1);
+            //封装查询结果 end
+            return pageResult;
+        }catch (ConnectException a){
+            LOGGER.error("未连接");
+        }catch (RuntimeException b){
+            b.printStackTrace();
+            LOGGER.error("返回错误");
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    private PageResult<Hospital> getHospPageResult(Integer page, Integer size, SearchSourceBuilder searchSourceBuilder) {
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices(USER);
+        //分页 start
+        searchSourceBuilder.size(size);
+        searchSourceBuilder.from((page-1)*size);
+        //分页 end
+        //排序 start
+        searchSourceBuilder.sort(new ScoreSortBuilder().order(SortOrder.DESC));
+        searchSourceBuilder.sort(new FieldSortBuilder("_id").order(SortOrder.ASC));
+        //排序 end
+        searchRequest.source(searchSourceBuilder);
+        System.out.println(searchSourceBuilder.toString());
+        try {
+            SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            //封装查询结果 start
+            SearchHit[] hits = searchResponse.getHits().getHits();
+            PageResult<Hospital> pageResult = new PageResult<>();
+            for (SearchHit hit : hits){
+                Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+                Map<String, HighlightField> highlightFields = hit.getHighlightFields();
+                HighlightField nameField = highlightFields.get("name");
+                if (nameField != null){
+                    Text[] texts = nameField.fragments();
+                    StringBuilder name = new StringBuilder();
+                    for (Text str : texts){
+                        name.append(str);
+                    }
+                    sourceAsMap.put("name", name.toString());
+                }
+                pageResult.getData().add(objectMapper.convertValue(sourceAsMap, Hospital.class));
             }
             pageResult.setPageNo(page);
             pageResult.setPageSize(size);
