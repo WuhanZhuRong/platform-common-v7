@@ -49,14 +49,21 @@ public class InfoController {
         this.esService = esService;
     }
 
-    @RequestMapping(value = "/hospital", method = RequestMethod.POST)
+    @RequestMapping(value = "/hospitals", method = RequestMethod.POST)
+    @ResponseBody
     public PageResult<Hospital> hospitals(Filter filter) {
         ArrayList<String> suppliesList = new ArrayList<String>();
         ArrayList<Integer> suppliesIds = filter.getSupplies();
         for (int i = 0; i < suppliesIds.size(); i++) {
             suppliesList.add(i, SUPPLY.inverse().get(suppliesIds.get(i)));
         }
-        return esService.findHospital(filter.getPage(), filter.getSize(), filter.city, suppliesList);
+        return esService.findHospitalList(filter.getPage(), filter.getSize(), filter.city, suppliesList);
+    }
+
+    @RequestMapping(value = "/hospital", method = RequestMethod.POST)
+    @ResponseBody
+    public PageResult<Hospital> hospital(@RequestParam(value="id")String id) {
+        return esService.findHospital(id);
     }
 
     @RequestMapping(value = "/supplies", method = RequestMethod.GET)

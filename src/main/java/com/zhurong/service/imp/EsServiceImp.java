@@ -106,7 +106,7 @@ public class EsServiceImp implements EsService {
     }
 
     @Override
-    public PageResult<Hospital> findHospital(Integer page, Integer size, String city, ArrayList<String> supplies) {
+    public PageResult<Hospital> findHospitalList(Integer page, Integer size, String city, ArrayList<String> supplies) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         if (city != null) {
@@ -117,6 +117,13 @@ public class EsServiceImp implements EsService {
         }
         searchSourceBuilder.query(boolQueryBuilder);
         return getHospPageResult(page, size, searchSourceBuilder);
+    }
+
+    @Override
+    public PageResult<Hospital> findHospital(String id) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.termQuery("id", id));
+        return getHospPageResult(1, 1, searchSourceBuilder);
     }
 
     @Override
