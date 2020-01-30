@@ -54,15 +54,17 @@ public class InfoController {
     public PageResult<Hospital> hospitals(Filter filter) {
         ArrayList<String> suppliesList = new ArrayList<String>();
         ArrayList<Integer> suppliesIds = filter.getSupplies();
-        for (int i = 0; i < suppliesIds.size(); i++) {
-            suppliesList.add(i, SUPPLY.inverse().get(suppliesIds.get(i)));
+        if (suppliesIds != null) {
+            for (int i = 0; i < suppliesIds.size(); i++) {
+                suppliesList.add(i, SUPPLY.inverse().get(suppliesIds.get(i)));
+            }
         }
         return esService.findHospitalList(filter.getPage(), filter.getSize(), filter.city, suppliesList);
     }
 
-    @RequestMapping(value = "/hospital", method = RequestMethod.POST)
+    @RequestMapping(value = "/hospital/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public PageResult<Hospital> hospital(@RequestParam(value="id")String id) {
+    public PageResult<Hospital> hospital(@PathVariable String id) {
         return esService.findHospital(id);
     }
 
