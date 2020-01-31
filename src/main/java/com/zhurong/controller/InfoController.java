@@ -22,6 +22,7 @@ import java.util.Map;
 
 @Api("Info接口")
 @RestController
+@CrossOrigin(origins = "*")
 public class InfoController {
 
     private static final  Logger LOGGER = LoggerFactory.getLogger(UserController.class);
@@ -52,6 +53,7 @@ public class InfoController {
     @RequestMapping(value = "/hospitals", method = RequestMethod.POST)
     @ResponseBody
     public PageResult<Hospital> hospitals(Filter filter) {
+
         ArrayList<String> suppliesList = new ArrayList<String>();
         ArrayList<Integer> suppliesIds = filter.getSupplies();
         if (suppliesIds != null) {
@@ -59,7 +61,12 @@ public class InfoController {
                 suppliesList.add(i, SUPPLY.inverse().get(suppliesIds.get(i)));
             }
         }
-        return esService.findHospitalList(filter.getPage(), filter.getSize(), filter.city, suppliesList);
+
+        Integer page = filter.getPage() != null ? filter.getPage():1;
+        Integer size = filter.getSize() != null ? filter.getSize():10;
+        String city = filter.getCity();
+
+        return esService.findHospitalList(page, size, city, suppliesList);
     }
 
     @RequestMapping(value = "/hospital/{id}", method = RequestMethod.GET)
