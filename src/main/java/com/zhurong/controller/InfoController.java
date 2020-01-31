@@ -69,7 +69,7 @@ public class InfoController {
         return esService.findHospitalList(page, size, city, suppliesList);
     }
 
-    @RequestMapping(value = "/hospital/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/hospitals/{id}", method = RequestMethod.GET)
     @ResponseBody
     public PageResult<Hospital> hospital(@PathVariable String id) {
         return esService.findHospital(id);
