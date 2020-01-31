@@ -50,8 +50,7 @@ public class InfoController {
         this.esService = esService;
     }
 
-    @RequestMapping(value = "/hospitals", method = RequestMethod.POST)
-    @ResponseBody
+    @GetMapping("/hospitals")
     public PageResult<Hospital> hospitals(Filter filter) {
 
         ArrayList<String> suppliesList = new ArrayList<String>();
@@ -69,14 +68,12 @@ public class InfoController {
         return esService.findHospitalList(page, size, city, suppliesList);
     }
 
-    @RequestMapping(value = "/hospitals/{id}", method = RequestMethod.GET)
-    @ResponseBody
+    @GetMapping("/hospitals/{id}")
     public PageResult<Hospital> hospital(@PathVariable String id) {
         return esService.findHospital(id);
     }
 
-    @RequestMapping(value = "/supplies", method = RequestMethod.GET)
-    @ResponseBody
+    @GetMapping("/supplies")
     public JSONArray supplies(){
         JSONArray jsonarray = new JSONArray();
 
