@@ -8,7 +8,7 @@
         <version>2.2.0.RELEASE</version>
         <relativePath/>
     </parent>
-    <groupId>com.wencheng</groupId>
+    <groupId>com.zhurong</groupId>
     <artifactId>es-demo-7.5</artifactId>
     <version>1.0.0</version>
     <name>es-demo-7.5</name>
@@ -85,6 +85,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <executable>true</executable>
                     <mainClass>com.zhurong.SinospnWebApplication</mainClass>
                 </configuration>
                 <executions>

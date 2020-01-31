@@ -3,15 +3,7 @@ server:
   servlet:
     context-path: /zhurong
 
-elasticsearch:
-  hosts: czr.vipdesk.cn
-
-
 spring:
   elasticsearch:
     rest:
       uris: czr.vipdesk.cn
-
-logging:
-  file: zhurong.log
-
