@@ -112,9 +112,11 @@ public class EsServiceImp implements EsService {
         BoolQueryBuilder boolQueryBuilder = city != null ?
                 QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("city", city)) : QueryBuilders.boolQuery();
 
-        if (supplies != null) {
+        if (!supplies.isEmpty()) {
             for (String supply : supplies) {
-                boolQueryBuilder.should(QueryBuilders.matchQuery("supplies", supply));
+                if (supply != null) {
+                    boolQueryBuilder.should(QueryBuilders.matchQuery("supplies", supply));
+                }
             }
         }
 
