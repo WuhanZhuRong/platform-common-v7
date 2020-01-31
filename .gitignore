@@ -1,4 +1,5 @@
 /target/
+/logdir_IS_UNDEFINED/
 
 .classpath
 .project

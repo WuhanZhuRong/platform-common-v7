@@ -1,24 +1,25 @@
 package com.zhurong.controller;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import com.zhurong.model.Filter;
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.zhurong.bean.Hospital;
+import com.zhurong.model.Filter;
 import com.zhurong.service.EsService;
 import com.zhurong.util.PageResult;
 
 import io.swagger.annotations.Api;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @Api("Info接口")
 @RestController
@@ -52,6 +53,8 @@ public class InfoController {
 
     @GetMapping("/hospitals")
     public PageResult<Hospital> hospitals(Filter filter) {
+    	
+    	LOGGER.info("进入hospitals参数是{}",filter.toString());
 
         ArrayList<String> suppliesList = new ArrayList<String>();
         ArrayList<Integer> suppliesIds = filter.getSupplies();
@@ -65,6 +68,8 @@ public class InfoController {
         Integer size = filter.getSize() != null ? filter.getSize():10;
         String city = filter.getCity();
 
+        LOGGER.info("出hospitals");
+        
         return esService.findHospitalList(page, size, city, suppliesList);
     }
 

@@ -1,0 +1,13 @@
+spring:
+    elasticsearch:
+      rest:
+        uris: czr.vipdesk.cn
+        
+server:
+  port: 8181
+  servlet:
+    context-path: /zhurong
+
+
+    
+

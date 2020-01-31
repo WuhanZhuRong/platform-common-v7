@@ -1,9 +1,11 @@
-server:
-  port: 8181
-  servlet:
-    context-path: /zhurong
-
 spring:
-  elasticsearch:
-    rest:
-      uris: czr.vipdesk.cn
+    profiles:
+      # 默认使用开发环境
+      active: sit
+      
+    
+resources:
+    #应用名称
+    appname: platform-common-v7
+    #日志打印的基础扫描包
+    basepackage: com.zhurong

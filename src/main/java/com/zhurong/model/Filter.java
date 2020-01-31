@@ -23,4 +23,11 @@ public class Filter {
     public void setSupplies(ArrayList<Integer> supplies) { this.supplies = supplies; }
 
     public void setCity(String city) { this.city = city; }
+
+	@Override
+	public String toString() {
+		return "Filter [page=" + page + ", size=" + size + ", supplies=" + supplies + ", city=" + city + "]";
+	}
+    
+    
 }
