@@ -1,5 +1,0 @@
-17:14:03.666 [INFO ] com.zhurong.SinospnWebApplication - Starting SinospnWebApplication on LAPTOP-NG87QHB4 with PID 2668 (D:\workCodeSpace\githubSpring\Springboot-ElasticSearch-demo\es-demo-7.5\target\classes started by Atlas in D:\workCodeSpace\githubSpring\Springboot-ElasticSearch-demo\es-demo-7.5)
-17:14:03.671 [INFO ] com.zhurong.SinospnWebApplication - The following profiles are active: sit
-17:14:08.156 [INFO ] com.zhurong.SinospnWebApplication - Started SinospnWebApplication in 5.202 seconds (JVM running for 5.927)
-17:15:58.283 [INFO ] c.zhurong.controller.UserController - 进入hospitals参数是Filter [page=1, size=5, supplies=null, city=武汉]
-17:15:58.286 [INFO ] c.zhurong.controller.UserController - 出hospitals,件数是0

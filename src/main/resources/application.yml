@@ -5,6 +5,8 @@ spring:
       
     
 resources:
+    #写入logs文件夹
+    logdir: logs/
     #应用名称
     appname: platform-common-v7
     #日志打印的基础扫描包
