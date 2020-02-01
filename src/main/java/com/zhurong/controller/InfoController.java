@@ -165,7 +165,8 @@ public class InfoController {
 
         JSONObject material = new JSONObject();
         JSONArray materials = new JSONArray();
-        for (int i = 1; i <= 12; i++) {
+        addNode(materials, SUPPLY.inverse().get(1), 1);
+        for (int i = 7; i <= 17; i++) {
             addNode(materials, SUPPLY.inverse().get(i), i);
         }
         material.put("name", "医用耗材");
@@ -175,7 +176,8 @@ public class InfoController {
 
         JSONObject protection = new JSONObject();
         JSONArray protections = new JSONArray();
-        for (int i = 13; i <= 27; i++) {
+        addNode(protections, SUPPLY.inverse().get(2), 2);
+        for (int i = 18; i <= 31; i++) {
             addNode(protections, SUPPLY.inverse().get(i), i);
         }
         protection.put("name", "防护设备");
@@ -184,7 +186,8 @@ public class InfoController {
 
         JSONObject equipment = new JSONObject();
         JSONArray equipments = new JSONArray();
-        for (int i = 28; i <= 45; i++) {
+        addNode(equipments, SUPPLY.inverse().get(3), 3);
+        for (int i = 32; i <= 48; i++) {
             addNode(equipments, SUPPLY.inverse().get(i), i);
         }
         equipment.put("name", "医疗设备");
@@ -193,7 +196,8 @@ public class InfoController {
 
         JSONObject disinfection = new JSONObject();
         JSONArray disinfections = new JSONArray();
-        for (int i = 46; i <= 58; i++) {
+        addNode(disinfections, SUPPLY.inverse().get(4), 4);
+        for (int i = 49; i <= 60; i++) {
             addNode(disinfections, SUPPLY.inverse().get(i), i);
         }
         disinfection.put("name", "消毒药品");
@@ -202,7 +206,8 @@ public class InfoController {
 
         JSONObject medicine = new JSONObject();
         JSONArray medicines = new JSONArray();
-        for (int i = 59; i <= 64; i++) {
+        addNode(medicines, SUPPLY.inverse().get(5), 5);
+        for (int i = 61; i <= 65; i++) {
             addNode(medicines, SUPPLY.inverse().get(i), i);
         }
         medicine.put("name", "药品");
@@ -211,7 +216,8 @@ public class InfoController {
 
         JSONObject reagent = new JSONObject();
         JSONArray reagents = new JSONArray();
-        for (int i = 65; i <= 68; i++) {
+        addNode(reagents, SUPPLY.inverse().get(6), 6);
+        for (int i = 66; i <= 68; i++) {
             addNode(reagents, SUPPLY.inverse().get(i), i);
         }
         reagent.put("name", "试剂");
