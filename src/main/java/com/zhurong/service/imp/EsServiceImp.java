@@ -44,7 +44,7 @@ public class EsServiceImp implements EsService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EsServiceImp.class);
     //    private static final String USER = "user";
-    private static final String USER = "index";
+    private static final String USER = "index2";
     private static final String USER1 = "user1";
     private static final String YMD = "yyyy-MM-dd";
     @Autowired
@@ -110,12 +110,13 @@ public class EsServiceImp implements EsService {
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         BoolQueryBuilder boolQueryBuilder = city != null ?
-                QueryBuilders.boolQuery().must(QueryBuilders.matchPhraseQuery("city", city)) : QueryBuilders.boolQuery();
+                QueryBuilders.boolQuery().must(QueryBuilders.matchPhraseQuery("city", city)) :
+                QueryBuilders.boolQuery().must(QueryBuilders.matchPhraseQuery("city", "市"));
 
         if (!supplies.isEmpty()) {
             for (String supply : supplies) {
                 if (supply != null) {
-                    boolQueryBuilder.should(QueryBuilders.matchQuery("supplies", supply));
+                    boolQueryBuilder.must(QueryBuilders.matchPhraseQuery("supplies.name", supply));
                 }
             }
         }

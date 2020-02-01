@@ -1,6 +1,8 @@
 package com.zhurong.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,9 +35,9 @@ public class Hospital implements Serializable {
 
 	public String phone;
 
-	public String supplies;
+	public ArrayList<Map<String, String>> supplies;
 
-	public String getSupplies() { return supplies; };
+	public ArrayList<Map<String, String>> getSupplies() { return supplies; };
 
 	public void setSupplies() { this.supplies = supplies; };
 

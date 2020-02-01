@@ -1,7 +1,7 @@
 spring:
     elasticsearch:
       rest:
-        uris: czr.vipdesk.cn
+        uris: czr-es.vipdesk.cn
         
 server:
   port: 8181
