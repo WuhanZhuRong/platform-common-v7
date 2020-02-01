@@ -21,15 +21,13 @@ public class Hospital implements Serializable {
 
 	public String id;
 
-	public String contributor;
-
 	public String province;
 
 	public String city;
 
 	public String area;
 
-	public String name;
+	public String hospital;
 
 	public String street;
 
@@ -79,8 +77,8 @@ public class Hospital implements Serializable {
 		this.area = area;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setHospital(String hospital) {
+		this.hospital = hospital;
 	}
 
 	public String getId() {
@@ -89,14 +87,6 @@ public class Hospital implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getContributor() {
-		return contributor;
-	}
-
-	public void setContributor(String contributor) {
-		this.contributor = contributor;
 	}
 
 	public String getProvince() {
@@ -115,8 +105,8 @@ public class Hospital implements Serializable {
 		this.city = city;
 	}
 
-	public String getName() {
-		return name;
+	public String getHospital() {
+		return hospital;
 	}
 
 }
