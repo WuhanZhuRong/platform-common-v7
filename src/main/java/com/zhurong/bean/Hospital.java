@@ -27,19 +27,61 @@ public class Hospital implements Serializable {
 
 	public String city;
 
-	public String suburb;
+	public String area;
 
 	public String name;
 
-	public String address;
+	public String street;
 
-	public String phone;
+	public String mobile;
+
+	public String contacts;
 
 	public ArrayList<Map<String, String>> supplies;
 
-	public ArrayList<Map<String, String>> getSupplies() { return supplies; };
+	public void setContacts(String contacts) {
+		this.contacts = contacts;
+	}
 
-	public void setSupplies() { this.supplies = supplies; };
+	public String getContacts() {
+		return contacts;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setSupplies(ArrayList<Map<String, String>> supplies) {
+		this.supplies = supplies;
+	}
+
+	public ArrayList<Map<String, String>> getSupplies() {
+		return supplies;
+	}
+
+	public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getId() {
 		return id;
@@ -73,38 +115,8 @@ public class Hospital implements Serializable {
 		this.city = city;
 	}
 
-	public String getSuburb() {
-		return suburb;
-	}
-
-	public void setSuburb(String suburb) {
-		this.suburb = suburb;
-	}
-
 	public String getName() {
 		return name;
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-
 
 }
