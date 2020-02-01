@@ -199,7 +199,7 @@ public class InfoController {
         for (int i = 59; i <= 64; i++) {
             addNode(medicines, SUPPLY.inverse().get(i), i);
         }
-        medicine.put("name", "消毒药品");
+        medicine.put("name", "药品");
         medicine.put("types", medicines);
         jsonarray.add(medicine);
 
@@ -208,7 +208,7 @@ public class InfoController {
         for (int i = 65; i <= 68; i++) {
             addNode(reagents, SUPPLY.inverse().get(i), i);
         }
-        reagent.put("name", "消毒药品");
+        reagent.put("name", "试剂");
         reagent.put("types", reagents);
         jsonarray.add(reagent);
 
