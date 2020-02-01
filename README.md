@@ -18,5 +18,5 @@ http://localhost:8080/zhurong/swagger-ui.html#!/user-controller/getAllUsingGET
 4. 使用到的bean按照 User样子写
 
 # API
-- http://czr.vipdesk.cn/zhurong/swagger-ui.html
-- http://czr.vipdesk.cn/index/_search
+- https://czr-api.vipdesk.cn/api/swagger-ui.html
+- https://czr-es.vipdesk.cn/index/_search
