@@ -9,10 +9,14 @@ page：1
 size：10
 ```
 
-取到 http://47.89.14.138/index/_search 里面的值
+取到 http://czr.vipdesk.cn/index/_search 里面的值
 
 http://localhost:8080/zhurong/swagger-ui.html#!/user-controller/getAllUsingGET
 
 3. UserController程序主入口，这个是sample
 
 4. 使用到的bean按照 User样子写
+
+# API
+- http://czr.vipdesk.cn/zhurong/swagger-ui.html
+- http://czr.vipdesk.cn/index/_search
