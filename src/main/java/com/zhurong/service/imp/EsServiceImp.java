@@ -106,12 +106,21 @@ public class EsServiceImp implements EsService {
     }
 
     @Override
-    public PageResult<Hospital> findHospitalList(Integer page, Integer size, String city, ArrayList<String> supplies) {
+    public PageResult<Hospital> findHospitalList(Integer page, Integer size, String city,
+                                                 ArrayList<String> supplies, ArrayList<String> catagories) {
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         BoolQueryBuilder boolQueryBuilder = city != null ?
                 QueryBuilders.boolQuery().must(QueryBuilders.matchPhraseQuery("city", city)) :
                 QueryBuilders.boolQuery().must(QueryBuilders.matchPhraseQuery("city", "市"));
+
+        if (!catagories.isEmpty()) {
+            for (String catagory : catagories) {
+                if (catagory != null) {
+                    boolQueryBuilder.should(QueryBuilders.matchPhraseQuery("supplies.name", catagory));
+                }
+            }
+        }
 
         if (!supplies.isEmpty()) {
             for (String supply : supplies) {
