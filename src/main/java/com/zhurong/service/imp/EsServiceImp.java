@@ -44,7 +44,7 @@ public class EsServiceImp implements EsService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EsServiceImp.class);
     //    private static final String USER = "user";
-    private static final String USER = "index2";
+    private static final String USER = "index";
     private static final String USER1 = "user1";
     private static final String YMD = "yyyy-MM-dd";
     @Autowired
