@@ -123,7 +123,7 @@ public class InfoController {
         this.esService = esService;
     }
 
-    @RequestMapping("/hospitals")
+    @GetMapping("/hospitals")
     public PageResult<Hospital> hospitals(Filter filter) {
     	
     	LOGGER.info("进入hospitals参数是{}",filter.toString());
@@ -132,12 +132,11 @@ public class InfoController {
         ArrayList<String> catagoriesList = new ArrayList<String>();
         ArrayList<Integer> suppliesIds = filter.getSupplies();
         if (suppliesIds != null) {
-            for (int i = 0; i < suppliesIds.size(); i++) {
-                Integer id = suppliesIds.get(i);
+            for (Integer id : suppliesIds) {
                 if (id > 6) {
-                    suppliesList.add(i, SUPPLY.inverse().get(id));
+                    suppliesList.add(SUPPLY.inverse().get(id));
                 } else {
-                    catagoriesList.add(i, SUPPLY.inverse().get(id));
+                    catagoriesList.add(SUPPLY.inverse().get(id));
                 }
             }
         }
