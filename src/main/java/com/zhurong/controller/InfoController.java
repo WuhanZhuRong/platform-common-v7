@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -126,7 +123,7 @@ public class InfoController {
         this.esService = esService;
     }
 
-    @GetMapping("/hospitals")
+    @RequestMapping("/hospitals")
     public PageResult<Hospital> hospitals(Filter filter) {
     	
     	LOGGER.info("进入hospitals参数是{}",filter.toString());
