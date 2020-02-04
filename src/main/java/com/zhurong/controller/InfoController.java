@@ -6,10 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -136,12 +133,11 @@ public class InfoController {
         ArrayList<String> catagoriesList = new ArrayList<>();
         ArrayList<Integer> suppliesIds = filter.getSupplies();
         if (suppliesIds != null) {
-            for (int i = 0; i < suppliesIds.size(); i++) {
-                Integer id = suppliesIds.get(i);
+            for (Integer id : suppliesIds) {
                 if (id > 6) {
-                    suppliesList.add(i, SUPPLY.inverse().get(id));
+                    suppliesList.add(SUPPLY.inverse().get(id));
                 } else {
-                    catagoriesList.add(i, SUPPLY.inverse().get(id));
+                    catagoriesList.add(SUPPLY.inverse().get(id));
                 }
             }
         }
