@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.elasticsearch.common.geo.GeoPoint;
 
 @Data
 @NoArgsConstructor
@@ -34,6 +35,8 @@ public class Hospital implements Serializable {
 	public String mobile;
 
 	public String contacts;
+
+	public GeoPoint location;
 
 	public ArrayList<Map<String, String>> supplies;
 

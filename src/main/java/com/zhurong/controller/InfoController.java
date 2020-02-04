@@ -1,6 +1,7 @@
 package com.zhurong.controller;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,8 +132,8 @@ public class InfoController {
     	
     	LOGGER.info("进入hospitals参数是{}",filter.toString());
 
-        ArrayList<String> suppliesList = new ArrayList<String>();
-        ArrayList<String> catagoriesList = new ArrayList<String>();
+        ArrayList<String> suppliesList = new ArrayList<>();
+        ArrayList<String> catagoriesList = new ArrayList<>();
         ArrayList<Integer> suppliesIds = filter.getSupplies();
         if (suppliesIds != null) {
             for (int i = 0; i < suppliesIds.size(); i++) {
@@ -225,6 +226,16 @@ public class InfoController {
         jsonarray.add(reagent);
 
         return jsonarray;
+    }
+
+    @GetMapping("getTotalDemands")
+    public Map<String, Long> getTotalDemands() {
+        return esService.getTotalDemands();
+    }
+
+    @GetMapping("findNearbyHospitals")
+    public PageResult<Hospital> findNearbyHospitals(double latitude, double longitude, double distance, int page, int size) {
+        return esService.findNearbyHospitals(latitude, longitude, distance, page, size);
     }
 
     private void addNode(JSONArray array, String name, Integer id) {

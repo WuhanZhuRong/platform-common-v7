@@ -17,15 +17,19 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.GetIndexRequest;
+import org.elasticsearch.common.geo.GeoDistance;
 import org.elasticsearch.common.text.Text;
+import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.GeoDistanceSortBuilder;
 import org.elasticsearch.search.sort.ScoreSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
@@ -37,6 +41,7 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -44,7 +49,7 @@ public class EsServiceImp implements EsService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EsServiceImp.class);
     //    private static final String USER = "user";
-    private static final String USER = "index2";
+    private static final String USER = "index";
     private static final String USER1 = "user1";
     private static final String YMD = "yyyy-MM-dd";
     @Autowired
@@ -73,7 +78,7 @@ public class EsServiceImp implements EsService {
     @Override
     public void save(User user) {
         Map<String, Object> map = objectMapper.convertValue(user, Map.class);
-        IndexRequest indexRequest = new IndexRequest(USER1).id(user.getId().toString()).source(map);
+        IndexRequest indexRequest = new IndexRequest(USER1).id(user.getId()).source(map);
         try {
             restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT);
         } catch (IOException e) {
@@ -379,6 +384,84 @@ public class EsServiceImp implements EsService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public PageResult<Hospital> findNearbyHospitals(double latitude, double longitude, double distance, int page, int size) {
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        GeoDistanceQueryBuilder distanceQueryBuilder = new GeoDistanceQueryBuilder("location");
+        distanceQueryBuilder.point(latitude, longitude);
+        distanceQueryBuilder.distance(distance, DistanceUnit.KILOMETERS);
+        distanceQueryBuilder.geoDistance(GeoDistance.PLANE);
+        searchSourceBuilder.postFilter(distanceQueryBuilder);
+
+        GeoDistanceSortBuilder distanceSortBuilder =
+                new GeoDistanceSortBuilder("location", latitude, longitude);
+        distanceSortBuilder.unit(DistanceUnit.KILOMETERS);
+        distanceSortBuilder.order(SortOrder.ASC);
+        searchSourceBuilder.sort(distanceSortBuilder);
+        searchSourceBuilder.size(size);
+        searchSourceBuilder.from((page-1)*size);
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices(USER);
+        searchRequest.source(searchSourceBuilder);
+        try {
+            SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            //封装查询结果 start
+            SearchHit[] hits = searchResponse.getHits().getHits();
+            PageResult<Hospital> pageResult = new PageResult<>();
+            for (SearchHit hit : hits){
+                Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+                Map<String, HighlightField> highlightFields = hit.getHighlightFields();
+                HighlightField nameField = highlightFields.get("name");
+                if (nameField != null){
+                    Text[] texts = nameField.fragments();
+                    StringBuilder name = new StringBuilder();
+                    for (Text str : texts){
+                        name.append(str);
+                    }
+                    sourceAsMap.put("name", name.toString());
+                }
+                pageResult.getData().add(objectMapper.convertValue(sourceAsMap, Hospital.class));
+            }
+            pageResult.setPageNo(page);
+            pageResult.setPageSize(size);
+            pageResult.setTotalCount(searchResponse.getHits().getTotalHits().value);
+            pageResult.setPageCount((long)Math.ceil(pageResult.getTotalCount()/(size+0.0)));
+            pageResult.setHasNextPage(page < pageResult.getPageCount());
+            pageResult.setHasPreviousPage(page > 1);
+            //封装查询结果 end
+            return pageResult;
+        } catch (IOException e) {
+            LOGGER.error("findNearbyHospitals error");
+        }
+        return null;
+    }
+
+    public Map<String, Long> getTotalDemands() {
+        List<Hospital> hospitals = new ArrayList<>();
+        int querySize = 1000;
+        int queryPage = 1;
+        boolean continueFlag = true;
+        while (continueFlag) {
+            PageResult<Hospital> pageResult = getHospAll(queryPage, querySize);
+            hospitals.addAll(pageResult.getData());
+            continueFlag = pageResult.isHasNextPage();
+            queryPage++;
+        }
+        Map<String, Long> totalDemands = new HashMap<>();
+        for (Hospital hospital : hospitals) {
+            List<Map<String, String>> supplies = hospital.getSupplies();
+            for (Map<String, String> supply : supplies) {
+                if (!supply.containsKey("amount") || !supply.containsKey("name")
+                        || Long.parseLong(supply.get("amount")) <= 0L)
+                    continue;
+                String name = supply.get("name");
+                Long current = totalDemands.getOrDefault(name, 0L);
+                totalDemands.put(name, current + Long.parseLong(supply.get("amount")));
+            }
+        }
+        return totalDemands;
     }
 
     private HighlightBuilder getHighlightBuilder (){
