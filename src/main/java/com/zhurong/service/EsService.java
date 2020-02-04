@@ -5,6 +5,7 @@ import com.zhurong.bean.User;
 import com.zhurong.util.PageResult;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public interface EsService {
 
@@ -31,4 +32,8 @@ public interface EsService {
     void createIndex(String index);
 
     String delIndex(String index);
+
+    Map<String, Long> getTotalDemands();
+
+    PageResult<Hospital> findNearbyHospitals(double latitude, double longitude, double distance, int page, int size);
 }
