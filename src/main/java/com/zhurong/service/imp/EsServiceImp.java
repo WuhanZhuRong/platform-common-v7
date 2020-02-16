@@ -2,6 +2,7 @@ package com.zhurong.service.imp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zhurong.bean.Hospital;
+import com.zhurong.bean.NoticeVo;
 import com.zhurong.bean.User;
 import com.zhurong.service.EsService;
 import com.zhurong.util.DateTimeUtil;
@@ -9,6 +10,7 @@ import com.zhurong.util.PageResult;
 
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -37,6 +39,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
+
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.ArrayList;
@@ -52,10 +56,12 @@ public class EsServiceImp implements EsService {
     private static final String USER = "index";
     private static final String USER1 = "user1";
     private static final String YMD = "yyyy-MM-dd";
+    
+    private static final String NOTICE = "notice";
     @Autowired
     private RestHighLevelClient restHighLevelClient;
     private ObjectMapper objectMapper;
-
+    
     @Autowired
     public EsServiceImp(RestHighLevelClient restHighLevelClient, ObjectMapper objectMapper){
         this.restHighLevelClient = restHighLevelClient;
@@ -478,4 +484,56 @@ public class EsServiceImp implements EsService {
         }
         return DateTimeUtil.parseDateToString(DateTimeUtil.parseStringToDate(date, YMD), YMD);
     }
+
+	@Override
+	public PageResult<NoticeVo> findNotice(String id) {
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.termQuery("_id", id));
+        return getNoticePageResult(1, 1, searchSourceBuilder);
+	}
+	
+	private PageResult<NoticeVo> getNoticePageResult(Integer page, Integer size, SearchSourceBuilder searchSourceBuilder) {
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices(NOTICE);
+        searchRequest.source(searchSourceBuilder);
+        System.out.println("query:"+searchSourceBuilder.toString());
+        try {
+            SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            //封装查询结果 start
+            SearchHit[] hits = searchResponse.getHits().getHits();
+            PageResult<NoticeVo> pageResult = new PageResult<>();
+            for (SearchHit hit : hits){
+                Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+                Map<String, HighlightField> highlightFields = hit.getHighlightFields();
+                HighlightField nameField = highlightFields.get("name");
+                if (nameField != null){
+                    Text[] texts = nameField.fragments();
+                    StringBuilder name = new StringBuilder();
+                    for (Text str : texts){
+                        name.append(str);
+                    }
+                    sourceAsMap.put("name", name.toString());
+                }
+                pageResult.getData().add(objectMapper.convertValue(sourceAsMap, NoticeVo.class));
+            }
+            pageResult.setPageNo(page);
+            pageResult.setPageSize(size);
+            pageResult.setTotalCount(searchResponse.getHits().getTotalHits().value);
+            pageResult.setPageCount((long)Math.ceil(pageResult.getTotalCount()/(size+0.0)));
+            pageResult.setHasNextPage(page < pageResult.getPageCount());
+            pageResult.setHasPreviousPage(page > 1);
+            //封装查询结果 end
+            return pageResult;
+        }catch (ConnectException a){
+            LOGGER.error("未连接");
+        }catch (RuntimeException b){
+            b.printStackTrace();
+            LOGGER.error("返回错误");
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+	
+	
 }

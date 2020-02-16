@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.zhurong.bean.Hospital;
+import com.zhurong.bean.NoticeVo;
 import com.zhurong.model.Filter;
 import com.zhurong.service.EsService;
 import com.zhurong.util.PageResult;
@@ -155,6 +156,20 @@ public class InfoController {
     public PageResult<Hospital> hospital(@PathVariable String id) {
         return esService.findHospital(id);
     }
+    
+    /**
+     * 
+     * @param id
+     * @return
+     */
+    @GetMapping("/notice/{id}")
+    public PageResult<NoticeVo> notice(@PathVariable String id) {
+    	
+    	LOGGER.info("进入hospitals参数是{}",id);
+        return esService.findNotice(id);
+    }
+    
+    
 
     @GetMapping("/supplies")
     public JSONArray supplies(){

@@ -1,7 +1,7 @@
 spring:
     profiles:
       # 默认使用开发环境
-      active: sit
+      active: dev
       
     
 resources:

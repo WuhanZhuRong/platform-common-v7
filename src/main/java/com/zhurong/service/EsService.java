@@ -1,6 +1,7 @@
 package com.zhurong.service;
 
 import com.zhurong.bean.Hospital;
+import com.zhurong.bean.NoticeVo;
 import com.zhurong.bean.User;
 import com.zhurong.util.PageResult;
 
@@ -24,6 +25,8 @@ public interface EsService {
     PageResult<Hospital> findHospitalList(Integer page, Integer size, String city, ArrayList<String> supplies, ArrayList<String> catagories);
 
     PageResult<Hospital> findHospital(String id);
+    
+    PageResult<NoticeVo> findNotice(String id);
 
     PageResult<User> search(Integer page, Integer size, String criteria);
 
